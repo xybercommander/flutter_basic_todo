@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:todo_app/helper/database_helper.dart';
+import 'package:todo_app/models/task_model.dart';
 
 class AddTaskScreen extends StatefulWidget {
+  final Task task;
+  AddTaskScreen({this.task});
+
   @override
   _AddTaskScreenState createState() => _AddTaskScreenState();
 }
@@ -34,15 +39,23 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   }
 
   // SUBMIT FUNCTION
-  _submit() {
+  _submit() async {
     if(_formKey.currentState.validate()) {
       _formKey.currentState.save();
       print('$_title, $_dateTime, $_priority');
-
-      // Insert the task to the database
-
-
-      // Update the tasks
+      
+      Task task = Task(title: _title, dateTime: _dateTime, priority: _priority);
+      if(widget.task == null) {
+        // -----------Insert the task to the database-----------
+        task.status = 0;
+        int i = await DatabaseHelper.instance.insertTask(task);
+        print('Inserted id : $i');
+      } else {
+        // -----------Updating the task in the database-----------
+        task.status = widget.task.status; 
+        int i = await DatabaseHelper.instance.updateTask(task);
+        print('Updated id : $i');
+      }      
 
       Navigator.pop(context);
     }
@@ -52,6 +65,14 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   void initState() {    
     super.initState();
+
+    // This will get called only if we are updating an exisiting task
+    if(widget.task != null) {
+      _title = widget.task.title;
+      _dateTime = widget.task.dateTime;
+      _priority = widget.task.priority;
+    }
+
     _dateController.text = _dateFormatter.format(_dateTime);
   }
 

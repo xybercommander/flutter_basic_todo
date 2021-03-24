@@ -99,14 +99,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 40),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.info),
-                        onPressed: () async {
-                          List<Map<String, dynamic>> queryRows = await DatabaseHelper.instance.getTaskMapList();
-                          print(queryRows);                                                
-                        },
-                      ),
+                    children: [                      
                       Text('My Tasks', 
                         style: TextStyle(
                           color: Colors.black,

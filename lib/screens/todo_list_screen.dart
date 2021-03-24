@@ -24,6 +24,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
     setState(() {
       _taskList = DatabaseHelper.instance.getTaskList();
     });
+    print(_taskList);  
   }
 
 
@@ -42,7 +43,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
               ),
             ),
             subtitle: Text(
-              '${_dateFormatter.format(task.dateTime)} • ${task.priority}',
+              '${_dateFormatter.format(task.date)} • ${task.priority}',
               style: TextStyle(
                 fontSize: 15,
                 decoration: task.status == 0 ? TextDecoration.none : TextDecoration.lineThrough
@@ -77,8 +78,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
         builder: (context, snapshot) {    
 
           // TODO SNAPSHOT IS SHOWING NULL
-          if(!snapshot.hasData) {            
-            print(snapshot.data.length);
+          if(!snapshot.hasData || snapshot.data.length == 0) {            
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -105,7 +105,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                         icon: Icon(Icons.info),
                         onPressed: () async {
                           List<Map<String, dynamic>> queryRows = await DatabaseHelper.instance.getTaskMapList();
-                          print(_taskList);                          
+                          print(queryRows);                                                
                         },
                       ),
                       Text('My Tasks', 
@@ -116,7 +116,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
                         ),),
                       SizedBox(height: 10,),
                       Text(
-                        '${completedTaskList} of ${snapshot.data.length}',
+                        '$completedTaskList of ${snapshot.data.length}',
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 20,

@@ -15,7 +15,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   final _formKey = GlobalKey<FormState>();
   String _title = '';
   String _priority;
-  DateTime _dateTime = DateTime.now();
+  DateTime _date = DateTime.now();
   TextEditingController _dateController = TextEditingController();
 
   final DateFormat _dateFormatter = DateFormat('MMM dd, yyyy');
@@ -23,18 +23,18 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
   // DATE PICKER FUNCTION
   _handleDatePicker() async {
-    final DateTime dateTime = await showDatePicker(
+    final DateTime date = await showDatePicker(
       context: context,
-      initialDate: _dateTime,
+      initialDate: _date,
       firstDate: DateTime(2000),
       lastDate: DateTime(2100)
     );
 
-    if(dateTime != null && dateTime != _dateTime) {
+    if(date != null && date != date) {
       setState(() {
-        _dateTime = dateTime;
+        _date = date;
       });
-      _dateController.text = _dateFormatter.format(_dateTime).toString();
+      _dateController.text = _dateFormatter.format(_date).toString();
     }
   }
 
@@ -42,9 +42,9 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   _submit() async {
     if(_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print('$_title, $_dateTime, $_priority');
+      print('$_title, $_date, $_priority');
       
-      Task task = Task(title: _title, dateTime: _dateTime, priority: _priority);
+      Task task = Task(title: _title, date: _date, priority: _priority);
       if(widget.task == null) {
         // -----------Insert the task to the database-----------
         task.status = 0;
@@ -69,11 +69,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     // This will get called only if we are updating an exisiting task
     if(widget.task != null) {
       _title = widget.task.title;
-      _dateTime = widget.task.dateTime;
+      _date = widget.task.date;
       _priority = widget.task.priority;
     }
 
-    _dateController.text = _dateFormatter.format(_dateTime);
+    _dateController.text = _dateFormatter.format(_date);
   }
 
   @override

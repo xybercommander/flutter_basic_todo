@@ -195,6 +195,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       ),
                     ),
 
+                    // -----------ADD TASK / UPDATE TASK BUTTON-----------
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 20),
                       height: 60,
@@ -215,6 +216,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         onPressed: _submit,
                       ),
                     ),
+
+                    // -----------DELETE BUTTON-----------
                     widget.task != null ? Container(
                       margin: EdgeInsets.symmetric(vertical: 20),
                       height: 60,

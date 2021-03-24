@@ -9,6 +9,7 @@ class Task {
   Task({this.title, this.date, this.priority, this.status});
   Task.withId({this.id, this.title, this.date, this.priority, this.status});
 
+  // ------------FUNCTION TO CONVERT DATA TO MAP------------
   Map<String, dynamic> toMap() {
     final map = Map<String, dynamic>();
     if(id != null) {
@@ -21,6 +22,7 @@ class Task {
     return map;
   }
 
+  // ------------FUNCTION TO CONVERT MAP TO RAW DATA------------
   factory Task.fromMap(Map<String, dynamic> map) {
     return Task.withId(
       id: map['id'],

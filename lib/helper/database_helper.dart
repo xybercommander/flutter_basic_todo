@@ -11,6 +11,7 @@ class DatabaseHelper {
   static Database _db;    
   String _dbName = 'todo_list.db';
 
+  // -----------DATABASE MEMBERS-----------
   String tasksTable = 'task_table';
   String colId = 'id';
   String colTitle = 'title';

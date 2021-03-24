@@ -4,8 +4,9 @@ import 'package:todo_app/helper/database_helper.dart';
 import 'package:todo_app/models/task_model.dart';
 
 class AddTaskScreen extends StatefulWidget {
+  final Function udpateTaskList;
   final Task task;
-  AddTaskScreen({this.task});
+  AddTaskScreen({this.task, this.udpateTaskList});
 
   @override
   _AddTaskScreenState createState() => _AddTaskScreenState();
@@ -30,7 +31,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       lastDate: DateTime(2100)
     );
 
-    if(date != null && date != date) {
+    if(date != null && date != _date) {
       setState(() {
         _date = date;
       });
@@ -52,13 +53,21 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         print('Inserted id : $i');
       } else {
         // -----------Updating the task in the database-----------
+        task.id = widget.task.id;
         task.status = widget.task.status; 
         int i = await DatabaseHelper.instance.updateTask(task);
         print('Updated id : $i');
       }      
-
+      widget.udpateTaskList();
       Navigator.pop(context);
     }
+  }
+
+  // DELETE FUNCTION
+  _delete() {
+    DatabaseHelper.instance.deleteTask(widget.task.id);
+    widget.udpateTaskList();
+    Navigator.pop(context);
   }
 
 
@@ -101,7 +110,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 child: Icon(Icons.arrow_back, size: 30, color: Theme.of(context).primaryColor,),
               ),
               SizedBox(height: 20,),
-              Text('Add Task',
+              Text(widget.task == null ? 'Add Task' : 'Update Task',
               style: TextStyle(
                 color: Colors.black,
                 fontSize: 40,
@@ -171,7 +180,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           );
                         }).toList(),
                         decoration: InputDecoration(
-                          labelText: 'Priority',
+                          labelText: widget.task == null ? 'Priority' : _priority,
                           labelStyle: TextStyle(fontSize: 18),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10)
@@ -197,14 +206,35 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       child: FlatButton(
                         shape: StadiumBorder(),
                         splashColor: Colors.white54,                      
-                        child: Text('Add',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20
-                        ),),
+                        child: Text(
+                          widget.task == null ? 'Add Task' : 'Update Task',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20
+                          ),),
                         onPressed: _submit,
                       ),
-                    )
+                    ),
+                    widget.task != null ? Container(
+                      margin: EdgeInsets.symmetric(vertical: 20),
+                      height: 60,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(30)
+                      ),
+                      child: FlatButton(
+                        shape: StadiumBorder(),
+                        splashColor: Colors.white54,                      
+                        child: Text(
+                          'Delete',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20
+                          ),),
+                        onPressed: _delete,
+                      ),
+                    ) : SizedBox.shrink()
                   ],
                 ),
               )

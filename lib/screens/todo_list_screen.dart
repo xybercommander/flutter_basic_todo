@@ -24,7 +24,6 @@ class _TodoListScreenState extends State<TodoListScreen> {
     setState(() {
       _taskList = DatabaseHelper.instance.getTaskList();
     });
-    print(_taskList);  
   }
 
 
@@ -56,10 +55,10 @@ class _TodoListScreenState extends State<TodoListScreen> {
                 DatabaseHelper.instance.updateTask(task);
                 _updateTaskList();
               },
-              value: true,
+              value: task.status == 1 ? true : false,
               activeColor: Theme.of(context).primaryColor,
             ),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => AddTaskScreen(task: task))),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => AddTaskScreen(task: task, udpateTaskList: _updateTaskList,))),
           ),
           Divider() // TODO remove the last divider
         ],
@@ -78,7 +77,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
         builder: (context, snapshot) {    
 
           // TODO SNAPSHOT IS SHOWING NULL
-          if(!snapshot.hasData || snapshot.data.length == 0) {            
+          if(!snapshot.hasData) {            
             return Center(
               child: CircularProgressIndicator(),
             );
@@ -136,7 +135,7 @@ class _TodoListScreenState extends State<TodoListScreen> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).primaryColor,
         child: Icon(Icons.add),
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => AddTaskScreen())),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => AddTaskScreen(udpateTaskList: _updateTaskList,))),
       ),
     );
   }

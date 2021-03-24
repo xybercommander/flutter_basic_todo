@@ -27,7 +27,7 @@ class Task {
       title: map['title'],
       date: DateTime.parse(map['date']),
       priority: map['priority'],
-      status: map['status']
+      status: int.parse(map['status'])
     );
   }
 
